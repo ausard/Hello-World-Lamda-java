@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'maven'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://localhost:8081/nexus/content/repositories/releases"
+    }
+}
+
+dependencies {
+    implementation 'hw.libs.common:helloworldlib:0.0.1'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.0'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.1.0'
+    testImplementation 'junit:junit:4.12'
+
+}
+
+task packageLibs(type: Zip) {
+    into('java/lib') {
+        from configurations.runtimeClasspath
+    }
+    dirMode = 0755
+    fileMode = 0755
+}
+jar {
+
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
