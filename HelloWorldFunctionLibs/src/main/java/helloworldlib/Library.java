@@ -7,4 +7,7 @@ public class Library {
     public boolean someLibraryMethod() {
         return true;
     }
+    public boolean someLibraryMethodNew() {
+        return false;
+    }
 }

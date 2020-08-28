@@ -23,8 +23,8 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
                 .withHeaders(headers);
         try {
             String output="";
-            boolean check=new Library().someLibraryMethod();
-            if(!check){
+            boolean check=new Library().someLibraryMethodNew();
+            if(check){
                 output = "<h1>Hello from Aliaksei Sabetski New</h1>";
             }else {
                 output="<h1>Hello from Aliaksei New</h1>";
