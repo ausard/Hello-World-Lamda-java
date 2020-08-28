@@ -5,7 +5,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
-import HelloWorldLib.Library;
+import helloworldlib.Library;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +38,5 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
                     .withBody("<b>Error</b>")
                     .withStatusCode(500);
         }
-    }    
+    }
 }
