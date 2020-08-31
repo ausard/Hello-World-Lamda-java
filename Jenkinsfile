@@ -39,7 +39,7 @@ pipeline {
                 }
             }
         }        
-        stage("Build and Deploy the application"){
+        stage("Deploy the application"){
             steps{
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
