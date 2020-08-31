@@ -40,7 +40,7 @@ Resources:
       FunctionName:
         Fn::Sub: helloworld-app-new-${StageName}      
       CodeUri: HelloWorldFunctionNew/build/libs/HelloWorldFunctionLibsNew.jar
-      Handler: example.Library::handleRequest
+      Handler: helloworldnew.App::handleRequest
       Runtime: java8
       Description: 'Hello From Lambda New'
       Events:
