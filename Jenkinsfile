@@ -18,12 +18,15 @@ pipeline {
                 git 'https://github.com/ausard/Hello-World-Lamda-java.git'
             }
         }
-
-        stage("Gradle build"){
+        stage("Build lib and publish to the nexus"){
             steps{
                 dir("HelloWorldFunctionLibs"){
                     sh './gradlew clean build publish'
-                }
+                }                
+            }
+        }
+        stage("Build application"){
+            steps{                
                 dir("HelloWorldFunction"){
                     sh './gradlew clean build'
                 }
@@ -34,9 +37,8 @@ pipeline {
                       }
                     }
                 }
-
             }
-        }
+        }        
         stage("Build and Deploy the application"){
             steps{
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
