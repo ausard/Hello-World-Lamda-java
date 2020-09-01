@@ -87,6 +87,3 @@ Outputs:
   HelloWorldFunctionNew:
     Description: "Hello World Lambda Function ARN"
     Value: !GetAtt HelloWorldFunctionNew.Arn
-  HelloWorldFunctionIamRoleNew:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRoleNew.Arn
