@@ -4,7 +4,7 @@ pipeline {
     options{
         timestamps()
     }
-    envorinment{
+    environment{
         NEXUS_ADDRESS = 'http://18.159.141.245:8081/nexus/'
     }
     parameters {
