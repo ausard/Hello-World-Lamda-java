@@ -35,7 +35,7 @@ apply plugin: 'maven-publish'
 publishing {
     publications {
         maven(MavenPublication) {
-            artifact("build/libs/helloworldlib-$version"+".jar") {
+            artifact("build/libs/helloworldlib-$version" + ".jar") {
                 extension 'jar'
             }
         }
@@ -43,7 +43,7 @@ publishing {
     repositories {
         maven {
             name 'nexus'
-            url "http://localhost:8081/nexus/content/repositories/releases/"
+            url project.nexus_address + "content/repositories/releases/"
             credentials {
                 username project.repoUser
                 password project.repoPassword
