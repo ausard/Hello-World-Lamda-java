@@ -24,7 +24,7 @@ pipeline {
         stage("Build lib and publish to the nexus"){
             steps{
                 dir("HelloWorldFunctionLibs"){
-                    sh "echo nexus_addess=${NEXUS_ADDRESS} >> gradle.properties"
+                    sh "echo nexus_address=${NEXUS_ADDRESS} >> gradle.properties"
                     sh './gradlew clean build publish'
                 }                
             }
@@ -32,13 +32,13 @@ pipeline {
         stage("Build application"){
             steps{                
                 dir("HelloWorldFunction"){
-                    sh "echo ${NEXUS_ADDRESS} >> gradle.properties"
+                    sh "echo nexus_address=${NEXUS_ADDRESS} >> gradle.properties"
                     sh './gradlew clean build'
                 }
                 script{
                     if (params.BuildAllApp == true){
                       dir("HelloWorldFunctionNew"){
-                          sh "echo ${NEXUS_ADDRESS} >> gradle.properties"
+                          sh "echo nexus_address=${NEXUS_ADDRESS} >> gradle.properties"
                           sh './gradlew clean build'
                       }
                     }
