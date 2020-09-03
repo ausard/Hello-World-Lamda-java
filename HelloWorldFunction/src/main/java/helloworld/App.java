@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import helloworldlib.Library;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,13 +23,13 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
         try {
-            String output="";
-            boolean check=new Library().someLibraryMethod();
-            if(!check){
+            String output = "";
+            boolean check = new Library().someLibraryMethod();
+            if (!check) {
                 output = "<h1>Hello from Aliaksei Sabetski</h1>";
-            }else {
-                output="<h1>Hello from AWS Lambda Function and aws-sam-cli</h1><br>";
-                output=output.concat("<h2>HI String Concatenation by concat() method</h2>");            
+            } else {
+                output = "<h1>Hello from AWS Lambda Function and aws-sam-cli</h1><br>";
+                output = output.concat("<h2>HI String Concatenation by concat() method</h2>");
             }
 
             return response

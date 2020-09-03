@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import helloworldlib.Library;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +23,12 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
         try {
-            String output="";
-            boolean check=new Library().someLibraryMethodNew();
-            if(check){
+            String output = "";
+            boolean check = new Library().someLibraryMethodNew();
+            if (check) {
                 output = "<h1>Hello from Aliaksei Sabetski New</h1>";
-            }else {
-                output="<h1>Hello from Aliaksei New</h1>";
+            } else {
+                output = "<h1>Hello from Aliaksei New</h1>";
             }
 
             return response
