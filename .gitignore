@@ -1,2 +1,5 @@
 /.idea/
 .gradle/
+/HelloWorldFunction/.gradle/
+/HelloWorldFunctionLibs/.gradle/
+/HelloWorldFunctionNew/.gradle/
