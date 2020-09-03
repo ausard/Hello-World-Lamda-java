@@ -27,7 +27,7 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             if(!check){
                 output = "<h1>Hello from Aliaksei Sabetski</h1>";
             }else {
-                output="<h1>Hello from Aliaksei</h1>";
+                output="<h1>Hello from Aliaksei AWS Lambda Function</h1>";
             }
 
             return response
