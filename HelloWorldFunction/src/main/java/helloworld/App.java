@@ -30,14 +30,14 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             } else {
                 output = "<h1>Hello from AWS Lambda Function and aws-sam-cli</h1><br>";
                 output = output.concat("<h2>HI String Concatenation by concat() method</h2>");
-                output = output + "<div class=\"boxed\"><!-- 
+                output = output + '<div class="boxed"><!-- 
 
 
                 If you want to use Lorem Ipsum within another program please contact us for details
                 on our API rather than parse the HTML below, we have XML and JSON available.
                 
                 
-                 --><div id=\"lipsum\">
+                 --><div id="lipsum">
                 <p>
                 <ul>
                 <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
@@ -74,7 +74,7 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
                 <li>Fusce pulvinar sem nec nunc convallis, in lacinia mauris ornare.</li>
                 <li>Quisque tristique quam eu augue rhoncus, at cursus massa pellentesque.</li>
                 </ul>
-                </p></div>";
+                </p></div>';
             }
 
             return response
