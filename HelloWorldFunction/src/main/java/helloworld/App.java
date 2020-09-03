@@ -28,7 +28,7 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
                 output = "<h1>Hello from Aliaksei Sabetski</h1>";
             }else {
                 output="<h1>Hello from AWS Lambda Function and aws-sam-cli</h1><br>";
-                output=output.concat("<h2>HI String Concatenation by concat() method</h2>")            
+                output=output.concat("<h2>HI String Concatenation by concat() method</h2>");            
             }
 
             return response
