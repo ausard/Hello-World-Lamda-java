@@ -1,4 +1,26 @@
 #!groovy
+import groovy.json.JsonSlurper
+
+def getLibVersions() {
+    // final API_KEY = "FOOBARAPIKEY"
+    // final REPO_NAME = "service-docker"
+    // final APP_NAME = "myapp"
+
+    // def cmd = [ 'bash', '-c', "curl -H 'X-JFrog-Art-Api: ${API_KEY}' https://artifactory.acme.co/artifactory/api/docker/${REPO_NAME}/v2/${APP_NAME}/tags/list".toString()]
+    // def result = cmd.execute().text
+
+    // def slurper = new JsonSlurper()
+    // def json = slurper.parseText(result)
+    // def tags = new ArrayList()
+    // if (json.tags == null || json.tags.size == 0)
+    //   tags.add("unable to fetch tags for ${APP_NAME}")
+    // else
+    //   tags.addAll(json.tags)
+    def metadata = new XmlSlurper().parse("https://dl.bintray.com/kdabir/glide/io/github/kdabir/glide/glide-gradle-plugin/maven-metadata.xml")
+    // println metadata.versioning.latest
+    // println metadata.versioning.versions.version*.text()
+    return metadata
+}
 pipeline {
     agent {
         label("agent")
@@ -10,6 +32,23 @@ pipeline {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
     }
     stages {
+        stages {
+        stage("Gather Deployment Parameters") {
+            steps {
+                timeout(time: 30, unit: 'SECONDS') {
+                    script {
+                    println metadata.versioning.versions.version*.text()
+                    //     // Show the select input modal
+                    //    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
+                    //                     parameters: [
+                    //                     choice(name: 'ENVIRONMENT', choices: ['dev','qa'].join('\n'), description: 'Please select the Environment'),
+                    //                     choice(name: 'IMAGE_TAG', choices: getDockerImages(), description: 'Available Docker Images')]
+                    //     env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
+                    //     env.IMAGE_TAG = INPUT_PARAMS.IMAGE_TAG
+                    }
+                }
+            }
+        }
         stage("Prepare Ws") {
             steps {
                 cleanWs()
@@ -19,14 +58,7 @@ pipeline {
             steps {
                 git 'https://github.com/ausard/Hello-World-Lamda-java.git'
             }
-        }
-        stage("Build lib and publish to the nexus") {
-            steps {
-                dir("HelloWorldFunctionLibs") {
-                    sh './gradlew clean build publish'
-                }
-            }
-        }
+        }        
         stage("Build application") {
             steps {
                 dir("HelloWorldFunction") {
