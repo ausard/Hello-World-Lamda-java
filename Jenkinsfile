@@ -5,7 +5,7 @@ def getVersionsLib(){
     for (version in metadata.versioning.versions) {
         versions.add(version)
     }
-    return versions
+    return versions.join('\n')
 }
 pipeline {
     agent {
