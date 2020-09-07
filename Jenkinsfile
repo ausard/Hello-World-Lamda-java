@@ -36,7 +36,7 @@ pipeline {
                 timeout(time: 30, unit: 'SECONDS') {
                     script {
                         metadata = new XmlSlurper().parse("http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml")
-                        echo "${metadata.versioning.versions.version*.text()}"
+                        echo metadata
                     //     // Show the select input modal
                     //    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
                     //                     parameters: [
