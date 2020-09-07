@@ -1,6 +1,4 @@
 #!groovy
-import groovy.json.JsonSlurper
-
 def getLibVersions() {
     // final API_KEY = "FOOBARAPIKEY"
     // final REPO_NAME = "service-docker"
@@ -31,8 +29,7 @@ pipeline {
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
     }
-    stages {
-        stages {
+    stages {        
         stage("Gather Deployment Parameters") {
             steps {
                 timeout(time: 30, unit: 'SECONDS') {
