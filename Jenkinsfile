@@ -14,7 +14,7 @@ def getLibVersions() {
     //   tags.add("unable to fetch tags for ${APP_NAME}")
     // else
     //   tags.addAll(json.tags)
-    def metadata = new XmlSlurper().parse("https://dl.bintray.com/kdabir/glide/io/github/kdabir/glide/glide-gradle-plugin/maven-metadata.xml")
+    def metadata = new XmlSlurper().parse("http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml")
     // println metadata.versioning.latest
     // println metadata.versioning.versions.version*.text()
     return metadata
@@ -35,7 +35,7 @@ pipeline {
                 timeout(time: 30, unit: 'SECONDS') {
                     script {
                         def versions = getLibVersions()
-                        println versions.versioning.versions.version*.text()
+                        echo versions.versioning.versions.version*.text()
                     //     // Show the select input modal
                     //    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
                     //                     parameters: [
