@@ -5,7 +5,7 @@ def getVersionsLib(){
     for (version in metadata.versioning.versions) {
         versions.add(version.text())
     }
-    println versions
+    println versions[3]
     return versions.join('\n')
 }
 pipeline {
