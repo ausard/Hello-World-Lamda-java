@@ -17,6 +17,7 @@ def getLibVersions() {
     def metadata = new XmlSlurper().parse("http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml")
     // println metadata.versioning.latest
     // println metadata.versioning.versions.version*.text()
+    println metadata.versioning.versions.version*.text()
     return metadata
 }
 pipeline {
@@ -34,8 +35,9 @@ pipeline {
             steps {
                 timeout(time: 30, unit: 'SECONDS') {
                     script {
-                        def versions = getLibVersions()
-                        echo versions.versioning.versions.version*.text()
+                        // def versions = getLibVersions()
+                        // echo versions.versioning.versions.version*.text()
+                        getLibVersions()
                     //     // Show the select input modal
                     //    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
                     //                     parameters: [
