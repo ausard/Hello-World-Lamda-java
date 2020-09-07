@@ -1,4 +1,12 @@
 #!groovy
+def getVersionsLib(){
+    def metadata = new XmlSlurper().parse("http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml")
+    def versions = []
+    for (version in metadata.versioning.versions) {
+        versions.add(version)
+    }
+    return versions
+}
 pipeline {
     agent {
         label("agent")
@@ -9,24 +17,19 @@ pipeline {
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
     }
-    stages {        
-        stage("Gather Deployment Parameters") {
+    stages {
+        stage('Gather Deployment Parameters') {
             steps {
                 timeout(time: 30, unit: 'SECONDS') {
+                    /* groovylint-disable-next-line NestedBlockDepth */
                     script {
-                        def metadata = new XmlSlurper().parse("http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml")
-                        def versions = []
-                        for (version in metadata.versioning.versions) {
-                            versions.add(version)
-                        }
-                        println versions
-                    //     // Show the select input modal
-                    //    def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
-                    //                     parameters: [
-                    //                     choice(name: 'ENVIRONMENT', choices: ['dev','qa'].join('\n'), description: 'Please select the Environment'),
-                    //                     choice(name: 'IMAGE_TAG', choices: getDockerImages(), description: 'Available Docker Images')]
-                    //     env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
-                    //     env.IMAGE_TAG = INPUT_PARAMS.IMAGE_TAG
+                        // Show the select input modal
+                       /* groovylint-disable-next-line NoDef */
+                       def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
+                            parameters: [                                       
+                                choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
+                            ]
+                        env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
                     }
                 }
             }
@@ -43,6 +46,7 @@ pipeline {
         }        
         stage("Build application") {
             steps {
+                echo env.VERSION_LIB
                 dir("HelloWorldFunction") {
                     sh './gradlew clean build'
                 }
