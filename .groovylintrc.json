@@ -1,0 +1,11 @@
+{
+    "extends": "recommended",
+    "rules": {
+        "MethodReturnTypeRequired": {
+            "enabled": false
+        },
+        "VariableTypeRequired": {
+            "enabled": false
+        }
+    }
+}
