@@ -1,18 +1,18 @@
 #!groovy
-def getVersionsLib(){
-    def metadata = new XmlSlurper().parse("http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml")
-    def versions = new ArrayList()
+def getVersionsLib() {
+    def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
+    def versions = []
     // for (version in metadata.versioning.versions) {
     //     versions.add(version.text())
     // }
-    versions.addAll(metadata.versioning.versions.version*.text())
+    // versions.addAll(metadata.versioning.versions.version*.text())
     // println versions[3]
     // return versions.join('\n')
     return versions
 }
 pipeline {
     agent {
-        label("agent")
+        label('agent')
     }
     options {
         timestamps()
@@ -48,7 +48,7 @@ pipeline {
         //     steps {
         //         git 'https://github.com/ausard/Hello-World-Lamda-java.git'
         //     }
-        // }        
+        // }
         // stage("Build application") {
         //     steps {
         //         echo env.VERSION_LIB
