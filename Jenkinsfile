@@ -6,12 +6,12 @@ def getVersionsLib() {
     for (version in metadata.versioning.versions) {
         versionsLib.add(version.text())
     }
+    def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     // versions.addAll(metadata.versioning.versions.version*.text())
     // println versions[3]
     // return versions.join('\n')
     // return versionsLib[0]
-    return metadata.versioning.versions.version*.text()
-}
+    return versions
 pipeline {
     agent {
         label('agent')
@@ -21,7 +21,7 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
-        choice(name: 'VERSION_LIB', choices: [getVersionsLib().join('\n')], description: 'Choise Library Versions')
+        choice(name: 'VERSION_LIB', choices: [getVersionsLib()], description: 'Choise Library Versions')
     }
     stages {
         stage('Gather Deployment Parameters') {
@@ -39,7 +39,7 @@ pipeline {
                 //     // }
                 //     echo params.VERSION_LIB
                 // }
-                echo getVersionsLib().join(', ')
+                echo getVersionsLib()
             }
         }
         // stage("Prepare Ws") {
