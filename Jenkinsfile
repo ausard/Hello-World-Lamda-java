@@ -26,19 +26,20 @@ pipeline {
     stages {
         stage('Gather Deployment Parameters') {
             steps {
-                timeout(time: 30, unit: 'SECONDS') {
-                    /* groovylint-disable-next-line NestedBlockDepth */
-                    // script {
-                    //     // Show the select input modal
-                    //    /* groovylint-disable-next-line NoDef */
-                    //    def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
-                    //         parameters: [
-                    //             choice(name: 'VERSION_LIB', choices: getVersionsLib().join('\n'), description: 'Choise Library Versions')
-                    //         ]
-                    //     env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
-                    // }
-                    echo params.VERSION_LIB
-                }
+                // timeout(time: 30, unit: 'SECONDS') {
+                //     /* groovylint-disable-next-line NestedBlockDepth */
+                //     // script {
+                //     //     // Show the select input modal
+                //     //    /* groovylint-disable-next-line NoDef */
+                //     //    def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
+                //     //         parameters: [
+                //     //             choice(name: 'VERSION_LIB', choices: getVersionsLib().join('\n'), description: 'Choise Library Versions')
+                //     //         ]
+                //     //     env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
+                //     // }
+                //     echo params.VERSION_LIB
+                // }
+                echo getVersionsLib().join(', ')
             }
         }
         // stage("Prepare Ws") {
