@@ -39,7 +39,7 @@ pipeline {
                 //     }
                 //     echo env.VERSION_LIB
                 // }
-                echo getVersionsLib()
+                echo getVersionsLib().join('\n')
             }
         }
         // stage("Prepare Ws") {
