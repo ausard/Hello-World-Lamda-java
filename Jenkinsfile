@@ -1,7 +1,6 @@
 #!groovy
 @NonCPS
 def getVersionsLib() {
-    
     def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
     def versionsLib = new ArrayList()
     for (version in metadata.versioning.versions) {
@@ -10,7 +9,8 @@ def getVersionsLib() {
     // versions.addAll(metadata.versioning.versions.version*.text())
     // println versions[3]
     // return versions.join('\n')
-    return versionsLib[0]
+    // return versionsLib[0]
+    return metadata.versioning.versions.version*.text()
 }
 pipeline {
     agent {
