@@ -21,5 +21,5 @@
         versions.add(version.text())
     }
     println versions.join('\n')
-    return metadata
+    return metadata.versioning.versions.version*.text()
 // }
