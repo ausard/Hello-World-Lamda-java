@@ -21,23 +21,23 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
-        // extendedChoice bindings: '', defaultValue: '0.0.1', description: 'Version ', groovyClasspath: '', groovyScriptFile: './getVersionLib.groovy', multiSelectDelimiter: ',', name: 'libVersion', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_SINGLE_SELECT', visibleItemCount: 10
+        choice(name: 'VERSION_LIB', choices: getVersionsLib().join('\n'), description: 'Choise Library Versions')
     }
     stages {
         stage('Gather Deployment Parameters') {
             steps {
                 timeout(time: 30, unit: 'SECONDS') {
                     /* groovylint-disable-next-line NestedBlockDepth */
-                    script {
-                        // Show the select input modal
-                       /* groovylint-disable-next-line NoDef */
-                       def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
-                            parameters: [
-                                choice(name: 'VERSION_LIB', choices: getVersionsLib().join('\n'), description: 'Choise Library Versions')
-                            ]
-                        env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
-                    }
-                    echo env.VERSION_LIB
+                    // script {
+                    //     // Show the select input modal
+                    //    /* groovylint-disable-next-line NoDef */
+                    //    def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
+                    //         parameters: [
+                    //             choice(name: 'VERSION_LIB', choices: getVersionsLib().join('\n'), description: 'Choise Library Versions')
+                    //         ]
+                    //     env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
+                    // }
+                    echo params.VERSION_LIB
                 }
             }
         }
