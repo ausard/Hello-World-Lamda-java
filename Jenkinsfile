@@ -22,7 +22,7 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
-        choice(name: 'VERSION_LIB', choices: [getVersionsLib()], description: 'Choise Library Versions')
+        choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
     }
     stages {
         stage('Gather Deployment Parameters') {
