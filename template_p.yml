@@ -31,7 +31,7 @@ Resources:
     Properties:
       FunctionName:
         Fn::Sub: helloworld-app-${StageName}      
-      CodeUri: aws-hello-world-function/build/libs/HelloWorldFunction.jar
+      CodeUri: aws-hello-world-function/build/libs/aws-hello-world-function.jar
       Handler: helloworld.App::handleRequest
       Runtime: java8
       Description: 'Hello From Lambda'     

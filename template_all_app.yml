@@ -30,7 +30,7 @@ Resources:
     Properties:
       FunctionName:
         Fn::Sub: helloworld-app-${StageName}      
-      CodeUri: aws-hello-world-function/build/libs/HelloWorldFunction.jar
+      CodeUri: aws-hello-world-function/build/libs/aws-hello-world-function.jar
       Handler: helloworld.App::handleRequest
       Runtime: java8
       Description: 'Hello From Lambda'     
@@ -56,7 +56,7 @@ Resources:
     Properties:
       FunctionName:
         Fn::Sub: helloworld-app-new-${StageName}      
-      CodeUri: aws-hello-world-function-new/build/libs/HelloWorldFunctionNew.jar
+      CodeUri: aws-hello-world-function-new/build/libs/aws-hello-world-function-new.jar
       Handler: helloworldnew.App::handleRequest
       Runtime: java8
       Description: 'Hello From Lambda New'
