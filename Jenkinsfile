@@ -5,12 +5,6 @@ def getVersionsLib() {
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }    
     return versions.reverse()
 }
-def getRelease(){
-    def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
-    def release = metadata.depthFirst().findAll { it.name() == 'release' }
-    return release
-}
-
 pipeline {
     agent {
         label('agent')
@@ -20,25 +14,22 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
-        choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
+        // choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
     }
     stages {
         stage('Gather Deployment Parameters') {
             steps {
-                // timeout(time: 30, unit: 'SECONDS') {
-                //     /* groovylint-disable-next-line NestedBlockDepth */
-                //     // script {
-                //     //     // Show the select input modal
-                //     //    /* groovylint-disable-next-line NoDef */
-                //     //    def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
-                //     //         parameters: [
-                //     //             choice(name: 'VERSION_LIB', choices: getVersionsLib().join('\n'), description: 'Choise Library Versions')
-                //     //         ]
-                //     //     env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
-                //     // }
-                //     echo params.VERSION_LIB
-                // }
-                echo params.VERSION_LIB
+                timeout(time: 30, unit: 'SECONDS') {
+                    script {
+                        // Show the select input modal
+                       def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
+                            parameters: [
+                                choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
+                            ]
+                        env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
+                    }                   
+                }
+                echo env.VERSION_LIB
             }
         }
         // stage("Prepare Ws") {
