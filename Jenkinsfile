@@ -7,7 +7,7 @@ def getVersionsLib() {
 }
 def getRelease(){
     def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
-    def release = result.depthFirst().findAll { it.name() == 'release' }
+    def release = metadata.depthFirst().findAll { it.name() == 'release' }
     return release
 }
 
