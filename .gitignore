@@ -1,5 +1,10 @@
-/.idea/
 .gradle/
-/HelloWorldFunction/.gradle/
-/HelloWorldFunctionLibs/.gradle/
-/HelloWorldFunctionNew/.gradle/
+build/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+.rup
+out/
