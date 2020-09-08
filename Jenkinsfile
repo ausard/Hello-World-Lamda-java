@@ -1,14 +1,14 @@
 #!groovy
 def getVersionsLib() {
     def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
-    def versions = []
+    def versionsLib = new ArrayList()
     for (version in metadata.versioning.versions) {
         versions.add(version.text())
     }
     // versions.addAll(metadata.versioning.versions.version*.text())
     // println versions[3]
     // return versions.join('\n')
-    return versions
+    return versionsLib
 }
 pipeline {
     agent {
@@ -19,24 +19,25 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
-        extendedChoice bindings: '', defaultValue: '0.0.1', description: 'Version ', groovyClasspath: '', groovyScriptFile: './getVersionLib.groovy', multiSelectDelimiter: ',', name: 'libVersion', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_SINGLE_SELECT', visibleItemCount: 10
+        // extendedChoice bindings: '', defaultValue: '0.0.1', description: 'Version ', groovyClasspath: '', groovyScriptFile: './getVersionLib.groovy', multiSelectDelimiter: ',', name: 'libVersion', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_SINGLE_SELECT', visibleItemCount: 10
     }
     stages {
         stage('Gather Deployment Parameters') {
             steps {
-                timeout(time: 30, unit: 'SECONDS') {
-                    /* groovylint-disable-next-line NestedBlockDepth */
-                    script {
-                        // Show the select input modal
-                       /* groovylint-disable-next-line NoDef */
-                       def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
-                            parameters: [
-                                choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
-                            ]
-                        env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
-                    }
-                    echo env.VERSION_LIB
-                }
+                // timeout(time: 30, unit: 'SECONDS') {
+                //     /* groovylint-disable-next-line NestedBlockDepth */
+                //     script {
+                //         // Show the select input modal
+                //        /* groovylint-disable-next-line NoDef */
+                //        def INPUT_PARAMS = input message: 'Please Choise the Version of Library', ok: 'Next',
+                //             parameters: [
+                //                 choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
+                //             ]
+                //         env.VERSION_LIB = INPUT_PARAMS.VERSION_LIB
+                //     }
+                //     echo env.VERSION_LIB
+                // }
+                echo getVersionsLib()
             }
         }
         // stage("Prepare Ws") {
