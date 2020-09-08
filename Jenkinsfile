@@ -1,7 +1,7 @@
 #!groovy
 /* groovylint-disable DuplicateMapLiteral, DuplicateStringLiteral, ImplicitClosureParameter, LineLength, NestedBlockDepth, NoDef, UnnecessaryGetter */
 def getVersionsLib() {
-    def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')    
+    def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
     @NonCPS
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
@@ -32,21 +32,23 @@ pipeline {
             steps {
                 // echo env.VERSION_LIB
                 dir('aws-hello-world-function') {
-                    script{
-                        ant.propertyfile(file: 'gradle.properties') {
-                            entry(key: 'version', value: env.VERSION_LIB)
-                        }
-                    }
+                    // script {
+                    //     // ant.propertyfile(file: 'gradle.properties') {
+                    //     //     entry(key: 'version', value: env.VERSION_LIB)
+                    //     // }
+                    // }
+                    sh "echo 'libVersion = ${params.VERSION_LIB}' >> gradle.properties"
                     sh './gradlew clean build'
                 }
                 script {
                     if (params.BuildAllApp == true) {
                         dir('aws-hello-world-function-new') {
-                            script{
-                                ant.propertyfile(file: 'gradle.properties') {
-                                    entry(key: 'version', value: env.VERSION_LIB)
-                                }
-                    }
+                            // script {
+                            //     ant.propertyfile(file: 'gradle.properties') {
+                            //         entry(key: 'version', value: env.VERSION_LIB)
+                            //     }
+                            // }
+                            sh "echo 'libVersion = ${params.VERSION_LIB}' >> gradle.properties"
                             sh './gradlew clean build'
                         }
                     }
