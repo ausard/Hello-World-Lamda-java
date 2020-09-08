@@ -2,9 +2,9 @@
 def getVersionsLib() {
     def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
     def versions = []
-    // for (version in metadata.versioning.versions) {
-    //     versions.add(version.text())
-    // }
+    for (version in metadata.versioning.versions) {
+        versions.add(version.text())
+    }
     // versions.addAll(metadata.versioning.versions.version*.text())
     // println versions[3]
     // return versions.join('\n')
