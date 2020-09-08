@@ -40,7 +40,7 @@ pipeline {
                 //     // }
                 //     echo params.VERSION_LIB
                 // }
-                echo getVersionsLib()
+                echo params.VERSION_LIB
             }
         }
         // stage("Prepare Ws") {
