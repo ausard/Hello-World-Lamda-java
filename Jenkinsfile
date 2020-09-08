@@ -19,17 +19,7 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
-        extendedChoice bindings: '',
-            defaultValue: '0.0.1',
-            description: 'Lib version : ',
-            groovyClasspath: '',
-            groovyScriptFile: './getVersionLib.groovy',
-            multiSelectDelimiter: ',',
-            name: 'VERSION',
-            quoteValue: false,
-            saveJSONParameterToFile: false,
-            type: 'PT_SINGLE_SELECT',
-            visibleItemCount: 5
+        extendedChoice bindings: '', defaultValue: '0.0.1', description: 'Version ', groovyClasspath: '', groovyScriptFile: './getVersionLib.groovy', multiSelectDelimiter: ',', name: 'libVersion', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_SINGLE_SELECT', visibleItemCount: 10
     }
     stages {
         stage('Gather Deployment Parameters') {
