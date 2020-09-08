@@ -12,6 +12,7 @@ def getVersionsLib() {
     // return versions.join('\n')
     // return versionsLib[0]
     return versions
+}
 pipeline {
     agent {
         label('agent')
