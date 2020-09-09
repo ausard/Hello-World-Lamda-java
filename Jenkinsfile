@@ -7,7 +7,8 @@ def getVersionsLib() {
 }
 def getSubProjects() {
     /* groovylint-disable-next-line NoDef */
-    def currentDir = new File('.')
+    // def currentDir = new File('.')
+    def currentDir = getClass().protectionDomain.codeSource.location.path
     def dirs = []
     currentDir.eachFile FileType.DIRECTORIES, {
         dirs << it.name
