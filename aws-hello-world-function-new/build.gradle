@@ -18,6 +18,14 @@ dependencies {
 
 }
 
+task setLibVersion() {
+    doLast {
+        ant.propertyfile(file: "gradle.properties") {
+            entry(key: "libVersion", value: libVersion)
+        }
+    }
+}
+
 task packageLibs(type: Zip) {
     into('java/lib') {
         from configurations.runtimeClasspath

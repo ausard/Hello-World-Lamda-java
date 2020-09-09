@@ -23,7 +23,6 @@ task setLibVersion() {
         ant.propertyfile(file: "gradle.properties") {
             entry(key: "libVersion", value: libVersion)
         }
-    println project.libVersion
     }
 }
 

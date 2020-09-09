@@ -6,7 +6,10 @@ def getVersionsLib() {
     return versions.reverse()
 }
 def getSubProjects() {
-    
+    dh = new File('.')
+    dh.eachFile {
+        println(it)
+    }
 }
 pipeline {
     agent {
@@ -32,6 +35,10 @@ pipeline {
         }
         stage('Build application') {
             steps {
+
+                getSubProjects()
+
+
                 dir('aws-hello-world-function') {
                     sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
                     sh './gradlew clean build'
