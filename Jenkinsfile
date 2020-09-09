@@ -17,7 +17,7 @@ pipeline {
         timestamps()
     }
     parameters {
-        booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
+        // booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
         choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
         /* groovylint-disable-next-line LineLength */
         choice(name: 'app', choices: ['aws-hello-world-function', 'aws-hello-world-function-new', 'all'], description: 'choose which application to deploy')
