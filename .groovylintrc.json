@@ -10,6 +10,9 @@
         "MethodReturnTypeRequired": {
             "enabled": false
         },
+        "NoDef": {
+            "enabled": false
+        },
         "UnnecessaryGetter": {
             "enabled": false
         },

@@ -1,10 +1,12 @@
 #!groovy
 import groovy.io.FileType
+@NonCPS
 def getVersionsLib() {
     def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
+@NonCPS
 def getSubProjects() {
     /* groovylint-disable-next-line NoDef */
     // def currentDir = new File('.')
@@ -39,17 +41,9 @@ pipeline {
         }
         stage('Build application') {
             steps {
-                script{
-                    def  FILES_LIST = sh (script: "ls   '${workers_dir}'", returnStdout: true).trim()
-                //DEBUG
-                echo "FILES_LIST : ${FILES_LIST}"
-                //PARSING
-                for(String ele : FILES_LIST.split("\\r?\\n")){ 
-                    println ">>>${ele}<<<"     
-                }
-                }
-                
-
+                sh 'pwd > workspace'
+                workspace = readFile('workspace').trim()
+                echo workspace
                 dir('aws-hello-world-function') {
                     sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
                     sh './gradlew clean build'
