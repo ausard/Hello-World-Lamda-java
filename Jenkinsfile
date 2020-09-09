@@ -39,9 +39,13 @@ pipeline {
         }
         stage('Build application') {
             steps {
-
-                getSubProjects()
-
+                def  FILES_LIST = sh (script: "ls   '${workers_dir}'", returnStdout: true).trim()
+                //DEBUG
+                echo "FILES_LIST : ${FILES_LIST}"
+                //PARSING
+                for(String ele : FILES_LIST.split("\\r?\\n")){ 
+                    println ">>>${ele}<<<"     
+                }
 
                 dir('aws-hello-world-function') {
                     sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
