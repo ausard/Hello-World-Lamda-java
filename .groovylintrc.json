@@ -4,6 +4,9 @@
         "MethodReturnTypeRequired": {
             "enabled": false
         },
+        "UnnecessaryGetter": {
+            "enabled": false
+        },
         "VariableTypeRequired": {
             "enabled": false
         }
