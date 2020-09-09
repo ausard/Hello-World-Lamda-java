@@ -1,6 +1,12 @@
 {
     "extends": "recommended",
     "rules": {
+        "ImplicitClosureParameter": {
+            "enabled": false
+        },
+        "JavaIoPackageAccess": {
+            "enabled": false
+        },
         "MethodReturnTypeRequired": {
             "enabled": false
         },

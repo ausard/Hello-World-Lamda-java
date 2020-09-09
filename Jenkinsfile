@@ -1,15 +1,18 @@
 #!groovy
-/* groovylint-disable DuplicateStringLiteral, NestedBlockDepth */
+import groovy.io.FileType
 def getVersionsLib() {
     def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
 def getSubProjects() {
-    dh = new File('.')
-    dh.eachFile {
-        println(it)
+    /* groovylint-disable-next-line NoDef */
+    def currentDir = new File('.')
+    def dirs = []
+    currentDir.eachFile FileType.DIRECTORIES, {
+        dirs << it.name
     }
+    println dirs
 }
 pipeline {
     agent {
