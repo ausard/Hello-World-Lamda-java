@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  hello-sam-app
+
+  Sample SAM Template for hello-sam-app
+
+Globals:
+  Function:
+    Timeout: 20
+
+Parameters:
+  StageName:
+    Type: String
+    Default: dev
+    Description: The Lambda Function Stage
+
+Resources:
+
+  RestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name:
+        Fn::Sub: helloworld-app-api-${StageName}
+      StageName:
+        Ref: StageName
+
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      FunctionName:
+        Fn::Sub: helloworld-app-${StageName}      
+      CodeUri: aws-hello-world-function/build/libs/aws-hello-world-function.jar
+      Handler: helloworld.App::handleRequest
+      Runtime: java8
+      Description: 'Hello From Lambda'     
+
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /
+            Method: get
+            RestApiId:
+              Ref: RestApi
+  RestApiNew:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name:
+        Fn::Sub: helloworld-app-new-api-${StageName}
+      StageName:
+        Ref: StageName
+
+  HelloWorldFunctionNew:
+    Type: AWS::Serverless::Function 
+    Properties:
+      FunctionName:
+        Fn::Sub: helloworld-app-new-${StageName}      
+      CodeUri: aws-hello-world-function-new/build/libs/aws-hello-world-function-new.jar
+      Handler: helloworldnew.App::handleRequest
+      Runtime: java8
+      Description: 'Hello From Lambda New'
+      Events:
+        Returntrue:
+          Type: Api 
+          Properties:
+            Path: /
+            Method: get
+            RestApiId:
+              Ref: RestApiNew            
+
+Outputs:
+
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/"
+  HelloWorldFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunction.Arn
+    
+  HelloWorldApiNew:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${RestApiNew}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/"
+  HelloWorldFunctionNew:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunctionNew.Arn
+
+  HelloWorldFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt HelloWorldFunctionRole.Arn
+  

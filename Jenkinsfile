@@ -81,17 +81,14 @@ pipeline {
                         /* groovylint-disable-next-line DuplicateStringLiteral, NestedBlockDepth */
                         if (params.app == 'aws-hello-world-function-new') {
                             /* groovylint-disable-next-line LineLength */
-                            sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-function-new.yml --output-template-file packaged.yml --s3-bucket sam-deployment-bucket-ausard'
+                            sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-function-new.yml --output-template-file packaged-new.yml --s3-bucket sam-deployment-bucket-ausard'
                             /* groovylint-disable-next-line DuplicateStringLiteral */
-                            sh '/usr/local/bin/sam deploy --template-file packaged.yml'
+                            sh '/usr/local/bin/sam deploy --template-file packaged-new.yml'
                         }
                         if (params.app == 'all') {
                             /* groovylint-disable-next-line LineLength */
-                            sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-function.yml --output-template-file packaged.yml --s3-bucket sam-deployment-bucket-ausard'
-                            sh '/usr/local/bin/sam deploy --template-file packaged.yml'
-                            /* groovylint-disable-next-line LineLength */
-                            sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-function-new.yml --output-template-file packaged-new.yml --s3-bucket sam-deployment-bucket-ausard'
-                            sh '/usr/local/bin/sam deploy --template-file packaged-new.yml'
+                            sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-all.yml --output-template-file packaged-all.yml --s3-bucket sam-deployment-bucket-ausard'
+                            sh '/usr/local/bin/sam deploy --template-file packaged-all.yml'                            
                         }
                     }
                 }
