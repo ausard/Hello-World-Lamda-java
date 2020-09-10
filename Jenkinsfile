@@ -56,7 +56,7 @@ pipeline {
         timestamps()
     }
     parameters {
-        choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
+        choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise library version')
         choice(name: 'app', choices: ['aws-hello-world-function', 'aws-hello-world-function-new', 'all'], description: 'choose which application to deploy')
     }
     stages {
@@ -72,7 +72,7 @@ pipeline {
         }
         stage('Build application') {
             steps {
-                choiceBuildProject()                
+                choiceBuildProject()
             }
         }
         stage('Deploy the application') {

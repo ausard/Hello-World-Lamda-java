@@ -3,10 +3,12 @@ plugins {
     id 'maven'
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        url project.nexusAddress + "content/repositories/releases/"
+allprojects{
+    repositories {
+        mavenCentral()
+        maven {
+            url project.nexusAddress + "content/repositories/releases/"
+        }
     }
 }
 
@@ -25,7 +27,6 @@ task setLibVersion() {
         }
     }
 }
-
 task packageLibs(type: Zip) {
     into('java/lib') {
         from configurations.runtimeClasspath
@@ -34,7 +35,6 @@ task packageLibs(type: Zip) {
     fileMode = 0755
 }
 jar {
-
   from {
     configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
   }
