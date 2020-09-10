@@ -21,14 +21,29 @@ def choiceBuildProject(){
     script{
         switch(params.app) {
             case 'aws-hello-world-function':
-                buildApp('aws-hello-world-function')
+                buildApp(params.app)
                 break
             case 'aws-hello-world-function-new':
-                buildApp('aws-hello-world-function-new')
+                buildApp(params.app)
                 break
             case 'all':
                 buildApp('aws-hello-world-function')
                 buildApp('aws-hello-world-function-new')
+                break            
+        }
+    }
+}
+def choiceDeployProject(){
+    script{
+        switch(params.app) {
+            case 'aws-hello-world-function':
+                deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
+                break
+            case 'aws-hello-world-function-new':
+                deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
+                break
+            case 'all':
+                deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')
                 break            
         }
     }
@@ -57,40 +72,18 @@ pipeline {
         }
         stage('Build application') {
             steps {
-                choiceBuildProject()
-                // script {
-                //     if (params.app == 'aws-hello-world-function') {
-                //         buildApp('aws-hello-world-function')
-                //     }
-                //     if (params.app == 'aws-hello-world-function-new') {
-                //         buildApp('aws-hello-world-function-new')
-                //     }
-                //     if (params.app == 'all') {
-                //         buildApp('aws-hello-world-function')
-                //         buildApp('aws-hello-world-function-new')
-                //     }
-                // }
+                choiceBuildProject()                
             }
         }
         stage('Deploy the application') {
             steps {
-                withCredentials([[$class           : 'AmazonWebServicesCredentialsBinding',
-                                  accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                                  credentialsId    : 'aws',
-                                  secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                withCredentials([[$class            : 'AmazonWebServicesCredentialsBinding',
+                                accessKeyVariable   : 'AWS_ACCESS_KEY_ID',
+                                credentialsId       : 'aws',
+                                secretKeyVariable   : 'AWS_SECRET_ACCESS_KEY']]) {
                     sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
                     sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
-                    script {
-                        if (params.app == 'aws-hello-world-function') {
-                            deployTemplate('tmpl-aws-hello-world-function.yml', 'packaged.yml')                            
-                        }
-                        if (params.app == 'aws-hello-world-function-new') {
-                            deployTemplate('tmpl-aws-hello-world-function-new.yml', 'packaged-new.yml')
-                        }
-                        if (params.app == 'all') {
-                            deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')
-                        }
-                    }
+                    choiceDeployProject()
                 }
             }
         }
