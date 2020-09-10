@@ -2,8 +2,8 @@
 
 @NonCPS
 def getVersionsLib() {
-    /* groovylint-disable-next-line LineLength */
-    def metadata = new XmlSlurper().parse('http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml')
+    def listVersionsLib = 'http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml'
+    def metadata = new XmlSlurper().parse(listVersionsLib)
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
@@ -17,7 +17,22 @@ def deployTemplate(startTemlpate, packagedTemplate){
     sh "/usr/local/bin/sam package --template-file ${startTemlpate} --output-template-file ${packagedTemplate} --s3-bucket sam-deployment-bucket-ausard"
     sh "/usr/local/bin/sam deploy --template-file ${packagedTemplate}"
 }
-/* groovylint-disable-next-line CompileStatic */
+def choiceBuildProject(){
+    script{
+        switch(params.app) {
+            case 'aws-hello-world-function':
+                buildApp('aws-hello-world-function')
+                break
+            case 'aws-hello-world-function-new':
+                buildApp('aws-hello-world-function-new')
+                break
+            case 'all':
+                buildApp('aws-hello-world-function')
+                buildApp('aws-hello-world-function-new')
+                break            
+        }
+    }
+}
 pipeline {
     agent {
         label('agent')
@@ -26,9 +41,7 @@ pipeline {
         timestamps()
     }
     parameters {
-        // booleanParam defaultValue: false, description: 'Building All Apps', name: 'BuildAllApp'
         choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise Library Versions')
-        /* groovylint-disable-next-line LineLength */
         choice(name: 'app', choices: ['aws-hello-world-function', 'aws-hello-world-function-new', 'all'], description: 'choose which application to deploy')
     }
     stages {
@@ -44,19 +57,19 @@ pipeline {
         }
         stage('Build application') {
             steps {
-                script {
-                    /* groovylint-disable-next-line CouldBeSwitchStatement */
-                    if (params.app == 'aws-hello-world-function') {
-                        buildApp('aws-hello-world-function')
-                    }
-                    if (params.app == 'aws-hello-world-function-new') {
-                        buildApp('aws-hello-world-function-new')
-                    }
-                    if (params.app == 'all') {
-                        buildApp('aws-hello-world-function')
-                        buildApp('aws-hello-world-function-new')
-                    }
-                }
+                choiceBuildProject(){
+                // script {
+                //     if (params.app == 'aws-hello-world-function') {
+                //         buildApp('aws-hello-world-function')
+                //     }
+                //     if (params.app == 'aws-hello-world-function-new') {
+                //         buildApp('aws-hello-world-function-new')
+                //     }
+                //     if (params.app == 'all') {
+                //         buildApp('aws-hello-world-function')
+                //         buildApp('aws-hello-world-function-new')
+                //     }
+                // }
             }
         }
         stage('Deploy the application') {
@@ -67,28 +80,15 @@ pipeline {
                                   secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
                     sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
-                    /* groovylint-disable-next-line NestedBlockDepth */
                     script {
-                        /* groovylint-disable-next-line DuplicateStringLiteral, NestedBlockDepth */
                         if (params.app == 'aws-hello-world-function') {
-                            deployTemplate('tmpl-aws-hello-world-function.yml', 'packaged.yml')
-                            /* groovylint-disable-next-line LineLength */
-                            // sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-function.yml --output-template-file packaged.yml --s3-bucket sam-deployment-bucket-ausard'
-                            // sh '/usr/local/bin/sam deploy --template-file packaged.yml'
+                            deployTemplate('tmpl-aws-hello-world-function.yml', 'packaged.yml')                            
                         }
-                        /* groovylint-disable-next-line DuplicateStringLiteral, NestedBlockDepth */
                         if (params.app == 'aws-hello-world-function-new') {
-                            /* groovylint-disable-next-line LineLength */
                             deployTemplate('tmpl-aws-hello-world-function-new.yml', 'packaged-new.yml')
-                            // sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-function-new.yml --output-template-file packaged-new.yml --s3-bucket sam-deployment-bucket-ausard'
-                            // /* groovylint-disable-next-line DuplicateStringLiteral */
-                            // sh '/usr/local/bin/sam deploy --template-file packaged-new.yml'
                         }
                         if (params.app == 'all') {
-                            /* groovylint-disable-next-line LineLength */
                             deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')
-                            // sh '/usr/local/bin/sam package --template-file tmpl-aws-hello-world-all.yml --output-template-file packaged-all.yml --s3-bucket sam-deployment-bucket-ausard'
-                            // sh '/usr/local/bin/sam deploy --template-file packaged-all.yml'                            
                         }
                     }
                 }
