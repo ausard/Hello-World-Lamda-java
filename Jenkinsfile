@@ -7,7 +7,12 @@ def getVersionsLib() {
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
-
+def buildApp(dirName){
+    dir(dirName){
+        sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
+        sh './gradlew clean build'
+    }    
+}
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent {
@@ -38,26 +43,14 @@ pipeline {
                 script {
                     /* groovylint-disable-next-line CouldBeSwitchStatement */
                     if (params.app == 'aws-hello-world-function') {
-                        dir('aws-hello-world-function') {
-                            sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
-                            sh './gradlew clean build'
-                        }
+                        buildApp('aws-hello-world-function')
                     }
                     if (params.app == 'aws-hello-world-function-new') {
-                        dir('aws-hello-world-function-new') {
-                            sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
-                            sh './gradlew clean build'
-                        }
+                        buildApp('aws-hello-world-function-new')
                     }
                     if (params.app == 'all') {
-                        dir('aws-hello-world-function') {
-                            sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
-                            sh './gradlew clean build'
-                        }
-                        dir('aws-hello-world-function-new') {
-                           sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
-                           sh './gradlew clean build'
-                        }
+                        buildApp('aws-hello-world-function')
+                        buildApp('aws-hello-world-function-new')
                     }
                 }
             }
