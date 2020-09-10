@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Build application') {
             steps {
-                choiceBuildProject(){
+                choiceBuildProject()
                 // script {
                 //     if (params.app == 'aws-hello-world-function') {
                 //         buildApp('aws-hello-world-function')
