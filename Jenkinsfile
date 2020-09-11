@@ -6,9 +6,8 @@ def getVersionsLib() {
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
-def buildApp(project){
-    sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
-    sh "./gradlew :${project}clean build"
+def buildApp(project){    
+    sh "./gradlew :${project}:clean build"
 }
 def listProjects(){
     def process = "ls -d */ | grep aws".execute()             
@@ -60,6 +59,11 @@ pipeline {
             steps {
                 git 'https://github.com/ausard/Hello-World-Lamda-java.git'
                 listProjects()
+            }
+        }
+        stage('Set lib version for applications') {
+            steps {
+                sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
             }
         }
         stage('Build application') {
