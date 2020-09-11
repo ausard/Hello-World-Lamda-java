@@ -13,8 +13,9 @@ def buildApp(dirName){
         sh './gradlew clean build'
     }    
 }
+@NonCPS
 def listProjects(){
-    def process = "ls -l".execute()             
+    def process = "ls -d */ | grep aws".execute()             
     process.in.eachLine { line ->               
     println line                            
 }
