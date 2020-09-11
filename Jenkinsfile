@@ -13,6 +13,12 @@ def buildApp(dirName){
         sh './gradlew clean build'
     }    
 }
+def listProjects(){
+    def process = "ls -l".execute()             
+    process.in.eachLine { line ->               
+    println line                            
+}
+}
 def deployTemplate(startTemlpate, packagedTemplate){
     sh "/usr/local/bin/sam package --template-file ${startTemlpate} --output-template-file ${packagedTemplate} --s3-bucket sam-deployment-bucket-ausard"
     sh "/usr/local/bin/sam deploy --template-file ${packagedTemplate}"
@@ -21,49 +27,18 @@ def deployTemplate(startTemlpate, packagedTemplate){
 def choiceProject(isBuild){
     script{
         switch(params.app) {
-            case 'aws-hello-world-function':
-                isBuild ? buildApp(params.app) : deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
-                break
-            case 'aws-hello-world-function-new':
-               isBuild ? buildApp(params.app) : deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
-                break
-            case 'all':
-                isBuild ? script{
-                    buildApp('aws-hello-world-function')
-                    buildApp('aws-hello-world-function-new')
-                } : deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
+            case 'aws-hello-world-function' || 'aws-hello-world-function-new':
+                isBuild                     ? 
+                    buildApp(params.app)    : 
+                    deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
                 break            
-        }
-    }
-}
-
-def choiceBuildProject(){
-    script{
-        switch(params.app) {
-            case 'aws-hello-world-function':
-                buildApp(params.app)
-                break
-            case 'aws-hello-world-function-new':
-                buildApp(params.app)
-                break
             case 'all':
-                buildApp('aws-hello-world-function')
-                buildApp('aws-hello-world-function-new')
-                break            
-        }
-    }
-}
-def choiceDeployProject(){
-    script{
-        switch(params.app) {
-            case 'aws-hello-world-function':
-                deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
-                break
-            case 'aws-hello-world-function-new':
-                deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
-                break
-            case 'all':
-                deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')
+                isBuild ? 
+                    script{
+                        buildApp('aws-hello-world-function')
+                        buildApp('aws-hello-world-function-new')
+                    }   : 
+                    deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
                 break            
         }
     }
@@ -88,6 +63,7 @@ pipeline {
         stage('Git clone') {
             steps {
                 git 'https://github.com/ausard/Hello-World-Lamda-java.git'
+                listProjects()
             }
         }
         stage('Build application') {
