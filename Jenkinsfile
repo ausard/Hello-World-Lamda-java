@@ -1,44 +1,48 @@
 #!groovy
 
-def getVersionsLib() {
+static def getVersionsLib() {
     def listVersionsLib = 'http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml'
     def metadata = new XmlSlurper().parse(listVersionsLib)
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
-def buildApp(project){    
+
+def buildApp(project) {
     sh "./gradlew :${project}:clean :${project}:build"
 }
-def listProjects(){
-    def process = "ls -d */ | grep aws".execute()             
-    process.in.eachLine { line ->               
-    println line                            
+
+def listProjects() {
+    def process = "ls -d */ | grep aws".execute()
+    process.in.eachLine { line ->
+        println line
+    }
 }
-}
-def deployTemplate(startTemlpate, packagedTemplate){
-    sh "/usr/local/bin/sam package --template-file ${startTemlpate} --output-template-file ${packagedTemplate} --s3-bucket sam-deployment-bucket-ausard"
+
+def deployTemplate(startTemplate, packagedTemplate) {
+    sh "/usr/local/bin/sam package --template-file ${startTemplate} --output-template-file ${packagedTemplate} --s3-bucket sam-deployment-bucket-ausard"
     sh "/usr/local/bin/sam deploy --template-file ${packagedTemplate}"
 }
 
-def choiceProject(isBuild){
-    script{
-        switch(params.app) {            
+def choiceProject(isBuild) {
+    script {
+        switch (params.app) {
             case 'all':
-                isBuild ? 
-                    script{
-                        sh "./gradlew clean build"
-                    }   : 
-                    deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
+                isBuild ?
+                        script {
+                            sh "./gradlew clean build"
+                        } :
+                        deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')
                 break
-            default :
+            default:
                 isBuild ? buildApp(params.app) : deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
-                break        
+                break
         }
     }
 }
+
 pipeline {
     agent {
-        label('aws')
+        label('aws_agent')
     }
     options {
         timestamps()
@@ -46,7 +50,7 @@ pipeline {
     parameters {
         choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise library version')
         choice(name: 'app', choices: ['aws-hello-world-function', 'aws-hello-world-function-new', 'all'], description: 'choose which application to deploy')
-    }    
+    }
     stages {
         stage('Prepare Ws') {
             steps {
@@ -71,19 +75,18 @@ pipeline {
         }
         stage('Deploy the application') {
             environment {
-                AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
                 AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
             }
             steps {
-                // withCredentials([[$class            : 'AmazonWebServicesCredentialsBinding',
-                //                 accessKeyVariable   : 'AWS_ACCESS_KEY_ID',
-                //                 credentialsId       : 'aws',
-                //                 secretKeyVariable   : 'AWS_SECRET_ACCESS_KEY']]) {
-                //     sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
-                //     sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
-                   
-                // }
-                choiceProject(false)
+                withCredentials([[$class           : 'AmazonWebServicesCredentialsBinding',
+                                  accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                  credentialsId    : 'aws',
+                                  secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
+                    sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
+                    choiceProject(false)
+                }
             }
         }
     }
