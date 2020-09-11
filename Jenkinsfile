@@ -27,8 +27,6 @@ def choiceProject(isBuild){
                 isBuild ? 
                     script{
                         sh "./gradlew clean build"
-                        // buildApp('aws-hello-world-function')
-                        // buildApp('aws-hello-world-function-new')
                     }   : 
                     deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
                 break
