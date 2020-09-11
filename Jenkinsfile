@@ -27,12 +27,7 @@ def deployTemplate(startTemlpate, packagedTemplate){
 
 def choiceProject(isBuild){
     script{
-        switch(params.app) {
-            case 'aws-hello-world-function' || 'aws-hello-world-function-new':
-                isBuild                     ? 
-                    buildApp(params.app)    : 
-                    deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
-                break            
+        switch(params.app) {            
             case 'all':
                 isBuild ? 
                     script{
@@ -40,7 +35,10 @@ def choiceProject(isBuild){
                         buildApp('aws-hello-world-function-new')
                     }   : 
                     deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
-                break            
+                break
+            default :
+                isBuild ? buildApp(params.app) : deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
+                break        
         }
     }
 }
@@ -64,7 +62,7 @@ pipeline {
         stage('Git clone') {
             steps {
                 git 'https://github.com/ausard/Hello-World-Lamda-java.git'
-                // listProjects()
+                listProjects()
             }
         }
         stage('Build application') {
