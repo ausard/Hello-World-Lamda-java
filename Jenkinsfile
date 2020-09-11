@@ -64,7 +64,7 @@ pipeline {
         stage('Git clone') {
             steps {
                 git 'https://github.com/ausard/Hello-World-Lamda-java.git'
-                listProjects()
+                // listProjects()
             }
         }
         stage('Build application') {
