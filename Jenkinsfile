@@ -17,6 +17,26 @@ def deployTemplate(startTemlpate, packagedTemplate){
     sh "/usr/local/bin/sam package --template-file ${startTemlpate} --output-template-file ${packagedTemplate} --s3-bucket sam-deployment-bucket-ausard"
     sh "/usr/local/bin/sam deploy --template-file ${packagedTemplate}"
 }
+
+def choiceProject(isBuild){
+    script{
+        switch(params.app) {
+            case 'aws-hello-world-function':
+                isBuild ? buildApp(params.app) : deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
+                break
+            case 'aws-hello-world-function-new':
+               isBuild ? buildApp(params.app) : deployTemplate("tmpl-${params.app}.yml", "${params.app}-packaged.yml")
+                break
+            case 'all':
+                isBuild ? script{
+                    buildApp('aws-hello-world-function')
+                    buildApp('aws-hello-world-function-new')
+                } : deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
+                break            
+        }
+    }
+}
+
 def choiceBuildProject(){
     script{
         switch(params.app) {
@@ -72,7 +92,7 @@ pipeline {
         }
         stage('Build application') {
             steps {
-                choiceBuildProject()
+                choiceProject(true)
             }
         }
         stage('Deploy the application') {
@@ -83,7 +103,7 @@ pipeline {
                                 secretKeyVariable   : 'AWS_SECRET_ACCESS_KEY']]) {
                     sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
                     sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
-                    choiceDeployProject()
+                    choiceProject(false)
                 }
             }
         }
