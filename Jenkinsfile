@@ -7,7 +7,7 @@ def getVersionsLib() {
     return versions.reverse()
 }
 def buildApp(project){    
-    sh "./gradlew :${project}:clean build"
+    sh "./gradlew :${project}:clean :${project}:build"
 }
 def listProjects(){
     def process = "ls -d */ | grep aws".execute()             

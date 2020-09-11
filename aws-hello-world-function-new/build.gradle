@@ -11,19 +11,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'hw.libs.common:helloworldlib:0.0.1'
+    implementation 'hw.libs.common:helloworldlib:' + project.libVersion
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.0'
     implementation 'com.amazonaws:aws-lambda-java-events:3.1.0'
     testImplementation 'junit:junit:4.12'
 
-}
-
-task setLibVersion() {
-    doLast {
-        ant.propertyfile(file: "gradle.properties") {
-            entry(key: "libVersion", value: libVersion)
-        }
-    }
 }
 
 task packageLibs(type: Zip) {
