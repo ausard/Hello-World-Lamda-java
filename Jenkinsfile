@@ -1,19 +1,15 @@
 #!groovy
 
-@NonCPS
 def getVersionsLib() {
     def listVersionsLib = 'http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml'
     def metadata = new XmlSlurper().parse(listVersionsLib)
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
 }
-def buildApp(dirName){
-    dir(dirName){
-        sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
-        sh './gradlew clean build'
-    }    
+def buildApp(project){
+    sh "./gradlew setLibVersion -PlibVersion=${params.VERSION_LIB}"
+    sh "./gradlew :${project}clean build"
 }
-@NonCPS
 def listProjects(){
     def process = "ls -d */ | grep aws".execute()             
     process.in.eachLine { line ->               
@@ -31,8 +27,9 @@ def choiceProject(isBuild){
             case 'all':
                 isBuild ? 
                     script{
-                        buildApp('aws-hello-world-function')
-                        buildApp('aws-hello-world-function-new')
+                        sh "./gradlew clean build"
+                        // buildApp('aws-hello-world-function')
+                        // buildApp('aws-hello-world-function-new')
                     }   : 
                     deployTemplate('tmpl-aws-hello-world-all.yml', 'packaged-all.yml')                
                 break
