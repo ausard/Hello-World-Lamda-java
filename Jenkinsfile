@@ -38,7 +38,7 @@ def choiceProject(isBuild){
 }
 pipeline {
     agent {
-        label('agent')
+        label('aws')
     }
     options {
         timestamps()
@@ -46,7 +46,7 @@ pipeline {
     parameters {
         choice(name: 'VERSION_LIB', choices: getVersionsLib(), description: 'Choise library version')
         choice(name: 'app', choices: ['aws-hello-world-function', 'aws-hello-world-function-new', 'all'], description: 'choose which application to deploy')
-    }
+    }    
     stages {
         stage('Prepare Ws') {
             steps {
@@ -70,15 +70,20 @@ pipeline {
             }
         }
         stage('Deploy the application') {
+            environment {
+                AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+            }
             steps {
-                withCredentials([[$class            : 'AmazonWebServicesCredentialsBinding',
-                                accessKeyVariable   : 'AWS_ACCESS_KEY_ID',
-                                credentialsId       : 'aws',
-                                secretKeyVariable   : 'AWS_SECRET_ACCESS_KEY']]) {
-                    sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
-                    sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
-                    choiceProject(false)
-                }
+                // withCredentials([[$class            : 'AmazonWebServicesCredentialsBinding',
+                //                 accessKeyVariable   : 'AWS_ACCESS_KEY_ID',
+                //                 credentialsId       : 'aws',
+                //                 secretKeyVariable   : 'AWS_SECRET_ACCESS_KEY']]) {
+                //     sh 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
+                //     sh 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
+                   
+                // }
+                choiceProject(false)
             }
         }
     }
