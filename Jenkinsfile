@@ -73,11 +73,7 @@ pipeline {
                 choiceProject(true)
             }
         }
-        stage('Deploy the application') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-            }
+        stage('Deploy the application') {            
             steps {
                 withCredentials([[$class           : 'AmazonWebServicesCredentialsBinding',
                                   accessKeyVariable: 'AWS_ACCESS_KEY_ID',
