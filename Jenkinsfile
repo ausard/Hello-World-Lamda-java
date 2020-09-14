@@ -1,7 +1,7 @@
 #!groovy
 
 static def getVersionsLib() {
-    def listVersionsLib = 'http://18.159.141.245:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml'
+    def listVersionsLib = 'http://18.192.21.247:8081/nexus/content/repositories/releases/hw/libs/common/helloworldlib/maven-metadata.xml'
     def metadata = new XmlSlurper().parse(listVersionsLib)
     def versions = metadata.depthFirst().findAll { it.name() == 'version' }
     return versions.reverse()
