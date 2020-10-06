@@ -1,6 +1,8 @@
+gradle/
 .gradle/
 build/
-
+.settings/
+.project
 ### IntelliJ IDEA ###
 .idea/
 *.iws
